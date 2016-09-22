@@ -5,10 +5,10 @@ source /opt/bin/functions.sh
 export GEOMETRY="$SCREEN_WIDTH""x""$SCREEN_HEIGHT""x""$SCREEN_DEPTH"
 
 #Generate Config
-./opt/selenium/config.json.sh > /opt/selenium/config.json
+./opt/selenium/config.json.sh | sudo tee /opt/selenium/config.json
 
 if [ -z "$HUB_PORT_4444_TCP_ADDR" ]; then
-  echo Not linked with a running Hub container 1>&2
+  echo "Not linked with a running Hub container (HUB_PORT_4444_TCP_ADDR)" 1>&2
   exit 1
 fi
 

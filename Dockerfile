@@ -61,7 +61,7 @@ RUN apt-get update -qqy \
 #Copy New Entrypoint
 #=======
 COPY config.json.sh /opt/selenium
-RUN chmod +x /opt/selenium/config.json
+RUN chmod +x /opt/selenium/config.json.sh
 
 COPY entry_point.sh /opt/bin
 RUN chmod +x /opt/bin/entry_point.sh
