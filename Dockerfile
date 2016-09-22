@@ -57,6 +57,14 @@ RUN apt-get update -qqy \
   && mv /opt/firefox /opt/firefox-$FIREFOX_VERSION \
   && ln -fs /opt/firefox-$FIREFOX_VERSION/firefox /usr/bin/firefox
 
+#======
+#Additional
+#======
+RUN apt-get update -qqy \
+    && apt-get install jq -y \
+    && apt-get install vim -y \
+    && apt-get install curl -y 
+
 #=======
 #Copy New Entrypoint
 #=======

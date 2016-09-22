@@ -7,6 +7,28 @@ export GEOMETRY="$SCREEN_WIDTH""x""$SCREEN_HEIGHT""x""$SCREEN_DEPTH"
 #Generate Config
 ./opt/selenium/config.json.sh | sudo tee /opt/selenium/config.json
 
+#### Marathon Configuration #####
+if [ -n "$MARATHON_URL" ]; then
+  MARATHON_CREDENTIALS_TOKEN=""
+  if [ -n "$MARATHON_CREDENTIALS" ]; then
+    MARATHON_CREDENTIALS_TOKEN="-u $MARATHON_CREDENTIALS"
+  fi
+
+  if [ -z "$HUB_APPID" ]; then
+    echo "Does not specify HUB_APPID" 1>&2
+    exit 1 
+  fi
+
+  #Encode slash in hub id
+  HUB_APPID=`echo $HUB_APPID | sed s#/#%2F#g`
+  
+  HUB_MARATHON=`curl $MARATHON_CREDENTIALS_TOKEN $MARATHON_URL/v2/apps/$HUB_APPID/tasks`
+  echo $HUB_MARATHON
+
+  HUB_PORT_4444_TCP_PORT=`echo $HUB_MARATHON | jq '.tasks[0].ports[0]'`
+  HUB_PORT_4444_TCP_ADDR=`echo $HUB_MARATHON | jq -r '.tasks[0].ipAddresses[0].ipAddress'`
+fi
+
 if [ -z "$HUB_PORT_4444_TCP_ADDR" ]; then
   echo "Not linked with a running Hub container (HUB_PORT_4444_TCP_ADDR)" 1>&2
   exit 1
